@@ -1,0 +1,11 @@
+[book]
+authors = ["Universal Tutorial Architect"]
+language = "zh-CN"
+multilingual = false
+src = "src"
+title = "Rust 语言系统化教程"
+
+[output.html]
+git-repository-url = "https://github.com/username/rust-guide"
+edit-url-template = "https://github.com/username/rust-guide/edit/master/{path}"
+site-url = "/rust-guide/"
