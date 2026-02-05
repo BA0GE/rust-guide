@@ -1,0 +1,652 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Rust 语言系统化教程</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-fe3e61ed.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-81329d67.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 语言系统化教程</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/username/rust-guide" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="前言-preface"><a class="header" href="#前言-preface">前言 (Preface)</a></h1>
+<h2 id="为什么选择-rust-the-why"><a class="header" href="#为什么选择-rust-the-why">为什么选择 Rust？ (The Why)</a></h2>
+<p>在编程语言的浩瀚星海中，Rust 是一颗奇异的恒星。它不仅仅是一门新的语言，更是一次对<strong>系统编程 (Systems Programming)</strong> 的重新思考。</p>
+<h3 id="传统的两难困境-the-traditional-dilemma"><a class="header" href="#传统的两难困境-the-traditional-dilemma">传统的两难困境 (The Traditional Dilemma)</a></h3>
+<p>长久以来，开发者不得不在两个极端之间做出妥协：</p>
+<ol>
+<li><strong>控制力与性能 (Control &amp; Performance)</strong>：如 C/C++。你可以精确控制每一个字节的内存，但代价是必须要手动管理内存（<code>malloc</code>/<code>free</code>）。这就像在没有任何安全措施的高空走钢丝，稍有不慎就会导致内存泄漏 (Memory Leak) 或悬空指针 (Dangling Pointer)。</li>
+<li><strong>安全性与生产力 (Safety &amp; Productivity)</strong>：如 Java/Python/Go。语言自带垃圾回收器 (Garbage Collector, GC)，帮你自动打扫内存。这很安全，但代价是不可预测的性能暂停 (STW, Stop-The-World) 和额外的运行时开销 (Runtime Overhead)。</li>
+</ol>
+<h3 id="rust-的第三条道路-the-third-way"><a class="header" href="#rust-的第三条道路-the-third-way">Rust 的第三条道路 (The Third Way)</a></h3>
+<p>Rust 提出了一套革命性的理念：<strong>通过编译期的严格检查，实现运行时的零成本安全。</strong></p>
+<p>它没有垃圾回收器 (No GC)，也没有手动内存管理 (No manual <code>malloc</code>/<code>free</code>)。它引入了 <strong>所有权 (Ownership)</strong> 和 <strong>生命周期 (Lifetimes)</strong> 的概念，强迫开发者在编写代码时就必须理清资源的归属关系。</p>
+<blockquote>
+<p><strong>核心哲学</strong>：
+如果程序通过了 Rust 编译器的检查，那么它在内存使用上就是数学级安全的（除非使用 <code>unsafe</code> 逃生舱）。</p>
+</blockquote>
+<h2 id="本教程的独特之处"><a class="header" href="#本教程的独特之处">本教程的独特之处</a></h2>
+<p>这份教程不同于官方文档或市面上的其他书籍，我们不仅教你 <strong>How (怎么写)</strong>，更注重 <strong>Why (为什么)</strong> 和 <strong>Etymology (词源)</strong>。</p>
+<ul>
+<li>我们会告诉你 <code>Cargo</code> 为什么叫 Cargo（货物），而不是 BuildTool。</li>
+<li>我们会解释 <code>Crate</code> 为什么叫 Crate（板条箱），而不是 Package。</li>
+<li>我们会剖析 <code>impl</code> 关键字背后的面向接口思想。</li>
+</ul>
+<p>准备好了吗？让我们开始这场从原子级别解构 Rust 的旅程。</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="第一章概念与哲学-concepts--philosophy"><a class="header" href="#第一章概念与哲学-concepts--philosophy">第一章：概念与哲学 (Concepts &amp; Philosophy)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="内存管理的演变-evolution-of-memory-management"><a class="header" href="#内存管理的演变-evolution-of-memory-management">内存管理的演变 (Evolution of Memory Management)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="所有权与借用-ownership--borrowing"><a class="header" href="#所有权与借用-ownership--borrowing">所有权与借用 (Ownership &amp; Borrowing)</a></h1>
+<p>这是 Rust 最独特、最困难，也是最迷人的部分。它是 Rust 能够在其不需要垃圾回收 (GC) 的情况下保证内存安全的核心机制。</p>
+<h2 id="1-核心哲学资源管理的责任制"><a class="header" href="#1-核心哲学资源管理的责任制">1. 核心哲学：资源管理的责任制</a></h2>
+<p>在大多数语言中，资源的清理要么靠手动（C/C++），要么靠后台默默工作的清洁工（Java/Go 的 GC）。
+Rust 引入了**“单一所有权” (Single Ownership)** 原则：</p>
+<blockquote>
+<p><strong>RULE</strong>: 任何时刻，内存中的每一个值都有且只有一个变量作为它的 <strong>所有者 (Owner)</strong>。</p>
+</blockquote>
+<h3 id="词源学解构"><a class="header" href="#词源学解构">词源学解构</a></h3>
+<ul>
+<li><strong>Owner (所有者)</strong>: 拥有物品合法支配权的人。在 Rust 中，变量就是数据的“主人”。</li>
+<li><strong>Scope (作用域)</strong>: 权力的边界。一旦主人离开了它的权力范围（离开作用域），它所拥有的东西就会被立即销毁。</li>
+</ul>
+<h2 id="2-raii资源获取即初始化"><a class="header" href="#2-raii资源获取即初始化">2. RAII：资源获取即初始化</a></h2>
+<p>Rust 的内存管理深深植根于 C++ 的 <strong>RAII (Resource Acquisition Is Initialization)</strong> 思想，并将其强制化。</p>
+<ul>
+<li><strong>申请 (Allocation)</strong>: 当你创建一个变量（如 <code>let s = String::from("hello")</code>），内存被申请。</li>
+<li><strong>释放 (Deallocation)</strong>: 当变量 <code>s</code> 离开作用域（<code>}</code>），Rust 自动调用 <code>drop</code> 函数释放内存。</li>
+</ul>
+<p>你不需要写 <code>free(s)</code>，Rust 编译器在编译阶段就帮你插入了这段代码。</p>
+<h2 id="3-移动-move-vs-复制-copy"><a class="header" href="#3-移动-move-vs-复制-copy">3. 移动 (Move) vs 复制 (Copy)</a></h2>
+<p>这是初学者最容易崩溃的地方。看这个例子：</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let s1 = String::from("hello");
+let s2 = s1; // 发生了什么？
+// println!("{}", s1); // 编译报错！
+<span class="boring">}</span></code></pre>
+<h3 id="为什么会报错"><a class="header" href="#为什么会报错">为什么会报错？</a></h3>
+<p>在 C++ 中，这通常是浅拷贝 (Shallow Copy)。在 Python/Java 中，这是引用赋值。
+但在 Rust 中，这叫 <strong>移动 (Move)</strong>。</p>
+<ul>
+<li><strong>Move (搬家)</strong>: <code>s1</code> 是数据的所有者。当 <code>let s2 = s1</code> 发生时，<code>s1</code> 把所有权<strong>移交</strong>给了 <code>s2</code>。</li>
+<li><strong>后果</strong>: <code>s1</code> 变成了废纸（无效变量）。Rust 为了防止 <strong>Double Free (二次释放)</strong> 错误（即 <code>s1</code> 和 <code>s2</code> 离开作用域时尝试释放同一块内存），强制废弃了 <code>s1</code>。</li>
+</ul>
+<blockquote>
+<p><strong>图解</strong>:
+想象这块内存是一张“房产证”。<code>s1</code> 手里拿着房产证。<code>let s2 = s1</code> 意味着 <code>s1</code> 把房产证递给了 <code>s2</code>。现在 <code>s1</code> 手里是空的，他不能再处理这套房子了。</p>
+</blockquote>
+<h2 id="4-借用-borrowing"><a class="header" href="#4-借用-borrowing">4. 借用 (Borrowing)</a></h2>
+<p>如果我只是想让别人看一眼我的房产证，不想把房子送给他，怎么办？
+这就是 <strong>引用 (References)</strong> 与 <strong>借用 (Borrowing)</strong>。</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let s1 = String::from("hello");
+let len = calculate_length(&amp;s1); // 传递引用
+println!("The length of '{}' is {}.", s1, len); // s1 依然有效！
+<span class="boring">}</span></code></pre>
+<h3 id="借用规则-the-rules-of-borrowing"><a class="header" href="#借用规则-the-rules-of-borrowing">借用规则 (The Rules of Borrowing)</a></h3>
+<p>这就像现实生活中的借东西：</p>
+<ol>
+<li>
+<p><strong>不可变借用 (Immutable Borrow)</strong> <code>&amp;T</code>:</p>
+<ul>
+<li>你可以借给无数人看（读）。</li>
+<li>没人能修改它。</li>
+<li><em>类比：图书馆的公共阅览书，大家都能看，谁也不能涂改。</em></li>
+</ul>
+</li>
+<li>
+<p><strong>可变借用 (Mutable Borrow)</strong> <code>&amp;mut T</code>:</p>
+<ul>
+<li>同一时间，只能借给一个人修改。</li>
+<li>借出去修改的时候，原来的主人也不能动它，也不能再借给别人看。</li>
+<li><em>类比：这书我借给你拿回家去写笔记，在我拿回来之前，其他人都看不了，我也看不了。</em></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>数据竞争 (Data Race) 的克星</strong>:
+这个规则在编译期就根除了数据竞争。数据竞争发生的前提是：多个指针同时访问同一数据，且至少有一个在写入。Rust 的规则（多读 OR 单写）完美避开了这个条件。</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="生命周期-lifetimes"><a class="header" href="#生命周期-lifetimes">生命周期 (Lifetimes)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="第二章术语字典-terminology-dictionary"><a class="header" href="#第二章术语字典-terminology-dictionary">第二章：术语字典 (Terminology Dictionary)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="术语字典构建系统-build-system"><a class="header" href="#术语字典构建系统-build-system">术语字典：构建系统 (Build System)</a></h1>
+<p>在 Rust 的世界里，构建系统的术语充满了浓厚的“工业物流”隐喻。理解这些隐喻，能帮你更好地理解工具的设计初衷。</p>
+<h2 id="1-cargo"><a class="header" href="#1-cargo">1. Cargo</a></h2>
+<ul>
+<li><strong>全称</strong>: Cargo</li>
+<li><strong>词源</strong>: 英语单词，意为“货物”、“船货”。</li>
+<li><strong>含义</strong>: Rust 的包管理器和构建工具。</li>
+<li><strong>哲学</strong>: 既然代码是要被交付的“产品”，那么管理这些产品的工具自然就是“负责装运货物的系统”。Cargo 负责下载依赖、编译代码、打包分发，就像港口的物流系统一样处理所有的货物调度。</li>
+</ul>
+<h2 id="2-crate"><a class="header" href="#2-crate">2. Crate</a></h2>
+<ul>
+<li><strong>全称</strong>: Crate</li>
+<li><strong>词源</strong>: 英语单词，意为“板条箱”（通常用于装运水果或大型机器的透气木箱）。</li>
+<li><strong>含义</strong>: Rust 中的编译单元。它可以是一个二进制文件 (Binary Crate)，也可以是一个库 (Library Crate)。</li>
+<li><strong>哲学</strong>:
+<ul>
+<li><strong>独立性</strong>: 每个箱子都是独立的，里面装着完整的货物（代码）。</li>
+<li><strong>可组合性</strong>: 多个箱子可以堆叠在一起运输。</li>
+<li><strong>对比</strong>: 其他语言可能叫 Package (包裹) 或 Module (模块)。Rust 叫 Crate，强调了它是 Cargo 系统中被运输和管理的最小实体单位。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-toml"><a class="header" href="#3-toml">3. Toml</a></h2>
+<ul>
+<li><strong>全称</strong>: Tom’s Obvious, Minimal Language</li>
+<li><strong>词源</strong>: 发明者 Tom Preston-Werner (GitHub 联合创始人) 的名字 + 显而易见 (Obvious) + 极简 (Minimal)。</li>
+<li><strong>含义</strong>: Rust 项目的配置文件格式 (如 <code>Cargo.toml</code>)。</li>
+<li><strong>哲学</strong>:
+<ul>
+<li><strong>人类可读</strong>: 相比 JSON 的花括号地狱和 YAML 的缩进地狱，TOML 旨在提供最清晰的键值对阅读体验。</li>
+<li><strong>确定性</strong>: 它的语法设计非常严格，减少了歧义。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-manifest"><a class="header" href="#4-manifest">4. Manifest</a></h2>
+<ul>
+<li><strong>全称</strong>: Manifest</li>
+<li><strong>词源</strong>: 航运术语，“载货清单”或“舱单”。</li>
+<li><strong>含义</strong>: 指 <code>Cargo.toml</code> 文件。</li>
+<li><strong>哲学</strong>: 既然是 Cargo (货物) 系统，那么说明货物内容的清单自然就是 Manifest (舱单)。它列出了这艘船（项目）上装了哪些 Crate (箱子/依赖)，以及货物的基本信息（版本、作者）。</li>
+</ul>
+<h2 id="5-registry"><a class="header" href="#5-registry">5. Registry</a></h2>
+<ul>
+<li><strong>全称</strong>: Registry</li>
+<li><strong>词源</strong>: 注册处、登记处。</li>
+<li><strong>含义</strong>: 托管 Crates 的中心仓库（默认是 crates.io）。</li>
+<li><strong>哲学</strong>: 就像船舶在港口需要在海关登记一样，所有的开源 Crate 都在 Registry 中登记造册，供全世界的开发者检索和下载。</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="术语字典类型系统-type-system"><a class="header" href="#术语字典类型系统-type-system">术语字典：类型系统 (Type System)</a></h1>
+<h2 id="1-trait"><a class="header" href="#1-trait">1. Trait</a></h2>
+<ul>
+<li><strong>全称</strong>: Trait</li>
+<li><strong>词源</strong>: 英语单词，意为“特征”、“特质”。</li>
+<li><strong>含义</strong>: 定义了某种类型具有的<strong>行为 (Behavior)</strong>。类似于 Java 中的 Interface 或 C++ 中的 Abstract Class。</li>
+<li><strong>哲学</strong>:
+<ul>
+<li><strong>行为优先</strong>: 我们不关心你“是”什么（继承），我们只关心你“能做”什么（组合）。</li>
+<li><strong>Shared Behavior</strong>: 如果多个类型都能像鸭子一样叫，那它们就都实现了 <code>Quack</code> trait。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-impl"><a class="header" href="#2-impl">2. Impl</a></h2>
+<ul>
+<li><strong>全称</strong>: Implementation</li>
+<li><strong>词源</strong>: 动词 Implement (实施/实现) 的缩写。</li>
+<li><strong>含义</strong>: 为某个类型定义具体的方法，或者实现某个 Trait。</li>
+<li><strong>哲学</strong>:
+<ul>
+<li><strong>数据与行为分离</strong>: 在 C++/Java 中，类的方法通常写在类的定义里。但在 Rust 中，<code>struct</code> 只定义数据（字段），<code>impl</code> 块定义行为（方法）。这使得代码结构极其清晰，也允许你为别人的类型（甚至标准库类型）添加自己的 Trait 实现（只要遵守孤儿规则）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-generic"><a class="header" href="#3-generic">3. Generic</a></h2>
+<ul>
+<li><strong>全称</strong>: Generic Programming</li>
+<li><strong>词源</strong>: General (通用的) -&gt; Generic (泛型)。</li>
+<li><strong>含义</strong>: 编写不依赖具体类型的代码。</li>
+<li><strong>哲学</strong>: <strong>单态化 (Monomorphization)</strong>。
+<ul>
+<li>这是 Rust 零成本抽象的关键。虽然你写的是泛型代码，但在编译时，Rust 会为你用到的每一个具体类型生成一份专用代码。</li>
+<li><em>结果</em>：泛型函数的运行速度 = 手写具体类型函数的运行速度。</li>
+<li><em>代价</em>：编译后的二进制文件体积变大（代码膨胀）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-enum"><a class="header" href="#4-enum">4. Enum</a></h2>
+<ul>
+<li><strong>全称</strong>: Enumeration</li>
+<li><strong>词源</strong>: 逐一枚举。</li>
+<li><strong>含义</strong>: 在 Rust 中，Enum 远超其他语言的“枚举”。它是 <strong>代数数据类型 (Algebraic Data Types, ADT)</strong>。</li>
+<li><strong>哲学</strong>:
+<ul>
+<li><code>Option&lt;T&gt;</code> (有些或没有) 和 <code>Result&lt;T, E&gt;</code> (成功或失败) 都是 Enum。</li>
+<li>它们强迫开发者处理每一种可能性。你不能忽略 <code>None</code> 或 <code>Err</code>，因为编译器会强制你匹配（Match）所有变体。这是 Rust 消除 <code>Null Pointer Exception</code> 的基石。</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="第三章实战指南-hands-on-guide"><a class="header" href="#第三章实战指南-hands-on-guide">第三章：实战指南 (Hands-on Guide)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="环境准备-prerequisites"><a class="header" href="#环境准备-prerequisites">环境准备 (Prerequisites)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="hello-world-深度解构-deconstructed"><a class="header" href="#hello-world-深度解构-deconstructed">Hello World 深度解构 (Deconstructed)</a></h1>
+<p>在其他语言中，Hello World 只是一个“能跑就行”的仪式。但在本教程中，我们将把它作为解剖台上的青蛙，彻底拆解 Rust 程序的编译与运行过程。</p>
+<h2 id="1-最小化实现"><a class="header" href="#1-最小化实现">1. 最小化实现</a></h2>
+<p>首先，我们不使用 Cargo，而是直接使用编译器 <code>rustc</code>，以此来理解工具链的底层逻辑。</p>
+<p>创建文件 <code>main.rs</code>：</p>
+<pre class="playground"><code class="language-rust">fn main() {
+    println!("Hello, world!");
+}</code></pre>
+<h3 id="逐行解析"><a class="header" href="#逐行解析">逐行解析</a></h3>
+<ul>
+<li><strong><code>fn</code></strong>: Function（函数）的缩写。
+<ul>
+<li><em>Why?</em> Rust 崇尚键盘输入的效率，偏好简短的关键字（如 <code>pub</code>, <code>mut</code>, <code>impl</code>）。</li>
+</ul>
+</li>
+<li><strong><code>main</code></strong>: 入口函数。
+<ul>
+<li>这里的代码是程序执行的起点。</li>
+</ul>
+</li>
+<li><strong><code>println!</code></strong>: 这<strong>不是</strong>一个函数，而是一个 <strong>宏 (Macro)</strong>。
+<ul>
+<li><em>怎么看出来的？</em> 那个感叹号 <code>!</code>。</li>
+<li><em>Why Macro?</em> 如果是普通函数，它只能接受固定数量的参数。但 <code>println!</code> 需要支持变长参数（如 <code>println!("{} {}", a, b)</code>）。在 Rust 中，只有宏能在编译期重写代码来实现这种灵活性。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-编译过程解密"><a class="header" href="#2-编译过程解密">2. 编译过程解密</a></h2>
+<p>运行以下命令：</p>
+<pre><code class="language-bash">rustc main.rs
+</code></pre>
+<p>这不仅生成了 <code>main</code> 可执行文件，背后还发生了惊人的魔法：</p>
+<ol>
+<li><strong>词法分析 (Lexing)</strong>: 将源代码切分成 Token。</li>
+<li><strong>语法分析 (Parsing)</strong>: 生成抽象语法树 (AST)。</li>
+<li><strong>宏展开 (Macro Expansion)</strong>: <code>println!</code> 被替换为真正的 I/O 代码（涉及 <code>std::io::stdio::print</code>）。</li>
+<li><strong>HIR 生成 (High-Level IR)</strong>: 进行类型检查和借用检查（Borrow Checking）。<strong>这是 Rust 安全性的核心关卡</strong>。</li>
+<li><strong>MIR 生成 (Mid-Level IR)</strong>: 进行基于控制流的优化（如死代码消除）。</li>
+<li><strong>LLVM IR 生成</strong>: 翻译给 LLVM 后端。</li>
+<li><strong>机器码生成</strong>: LLVM 最终吐出针对你 CPU 架构的 0101 二进制码。</li>
+</ol>
+<h2 id="3-使用-cargo-现代方式"><a class="header" href="#3-使用-cargo-现代方式">3. 使用 Cargo (现代方式)</a></h2>
+<p>在实际开发中，我们几乎总是使用 Cargo。</p>
+<pre><code class="language-bash">cargo new hello_cargo
+cd hello_cargo
+cargo run
+</code></pre>
+<h3 id="cargo-run-到底干了什么"><a class="header" href="#cargo-run-到底干了什么"><code>cargo run</code> 到底干了什么？</a></h3>
+<p>它是一个组合命令，相当于连续执行了：</p>
+<ol>
+<li><strong>Check</strong>: <code>cargo check</code> (检查代码是否能通过编译，但不生成二进制，速度极快)。</li>
+<li><strong>Build</strong>: <code>cargo build</code> (真正调用 <code>rustc</code> 生成二进制文件，放在 <code>target/debug/</code> 下)。</li>
+<li><strong>Execute</strong>: <code>./target/debug/hello_cargo</code> (运行生成的文件)。</li>
+</ol>
+<blockquote>
+<p><strong>Debug vs Release</strong>:
+默认情况下，Cargo 进行 <strong>Debug 构建</strong>。</p>
+<ul>
+<li>特点：编译快，运行慢，包含调试符号，无优化。</li>
+<li>场景：开发阶段。</li>
+</ul>
+<p>当你准备上线时，必须使用 <code>cargo run --release</code>。</p>
+<ul>
+<li>特点：编译极慢（因为要做大量优化），运行极快（有时比 Debug 快 10-100 倍），去除调试符号。</li>
+<li>场景：生产环境。</li>
+</ul>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="猜数字游戏-guessing-game"><a class="header" href="#猜数字游戏-guessing-game">猜数字游戏 (Guessing Game)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="第四章避坑指南-troubleshooting"><a class="header" href="#第四章避坑指南-troubleshooting">第四章：避坑指南 (Troubleshooting)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="编译器报错哲学-compiler-errors-philosophy"><a class="header" href="#编译器报错哲学-compiler-errors-philosophy">编译器报错哲学 (Compiler Errors Philosophy)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="常见借用检查错误-common-borrow-checker-errors"><a class="header" href="#常见借用检查错误-common-borrow-checker-errors">常见借用检查错误 (Common Borrow Checker Errors)</a></h1>
+<p>Rust 的借用检查器 (Borrow Checker) 是新手最大的噩梦。它像一个严格的图书管理员，拒绝任何可能导致混乱的借书请求。</p>
+<p>不要害怕报错，<strong>报错是编译器在教你写出安全的代码</strong>。</p>
+<h2 id="场景-1-借出后修改-mutation-after-borrow"><a class="header" href="#场景-1-借出后修改-mutation-after-borrow">场景 1: 借出后修改 (Mutation after Borrow)</a></h2>
+<h3 id="错误代码"><a class="header" href="#错误代码">错误代码</a></h3>
+<pre class="playground"><code class="language-rust">fn main() {
+    let mut s = String::from("hello");
+    
+    let r1 = &amp;s; // 不可变借用 (Immutable Borrow)
+    s.push_str(", world"); // 尝试修改原数据 (Mutation)
+    
+    println!("{}", r1); // 还要继续使用之前的借用
+}</code></pre>
+<h3 id="报错分析"><a class="header" href="#报错分析">报错分析</a></h3>
+<pre><code class="language-text">error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+ --&gt; src/main.rs:5:5
+  |
+4 |     let r1 = &amp;s;
+  |              -- immutable borrow occurs here (r1 借走了)
+5 |     s.push_str(", world");
+  |     ^^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here (s 想要修改)
+6 |     
+7 |     println!("{}", r1);
+  |                    -- immutable borrow later used here (r1 后面还要用)
+</code></pre>
+<h3 id="修复逻辑"><a class="header" href="#修复逻辑">修复逻辑</a></h3>
+<p>Rust 禁止在<strong>借出引用</strong>的期间修改原数据。因为如果 <code>s</code> 变了（比如扩容导致内存地址变了），<code>r1</code> 这个引用就会变成悬空指针。</p>
+<p><strong>解决方案</strong>：确保修改发生在引用的作用域结束之后。</p>
+<pre class="playground"><code class="language-rust">fn main() {
+    let mut s = String::from("hello");
+    
+    {
+        let r1 = &amp;s; 
+        println!("{}", r1); 
+    } // r1 在这里离开作用域，归还了所有权
+    
+    s.push_str(", world"); // 现在可以修改了，因为没人借着
+}</code></pre>
+<h2 id="场景-2-悬空引用-dangling-references"><a class="header" href="#场景-2-悬空引用-dangling-references">场景 2: 悬空引用 (Dangling References)</a></h2>
+<h3 id="错误代码-1"><a class="header" href="#错误代码-1">错误代码</a></h3>
+<pre class="playground"><code class="language-rust">fn main() {
+    let reference_to_nothing = dangle();
+}
+
+fn dangle() -&gt; &amp;String {
+    let s = String::from("hello");
+    &amp;s // 试图返回 s 的引用
+}</code></pre>
+<h3 id="报错分析-1"><a class="header" href="#报错分析-1">报错分析</a></h3>
+<pre><code class="language-text">error[E0106]: missing lifetime specifier
+  |
+5 | fn dangle() -&gt; &amp;String {
+  |                ^ expected named lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but there is no value for it to be borrowed from
+</code></pre>
+<h3 id="修复逻辑-1"><a class="header" href="#修复逻辑-1">修复逻辑</a></h3>
+<p>函数 <code>dangle</code> 结束时，局部变量 <code>s</code> 会被释放（Drop）。如果你返回它的引用，这个引用指向的就是一块“被释放的内存”。Rust 坚决禁止这种行为。</p>
+<p><strong>解决方案</strong>：直接返回所有权（Move），而不是引用。</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn dangle() -&gt; String { // 去掉 &amp;
+    let s = String::from("hello");
+    s // 把所有权移交给调用者
+}
+<span class="boring">}</span></code></pre>
+<h2 id="总结借用检查器的三定律"><a class="header" href="#总结借用检查器的三定律">总结：借用检查器的三定律</a></h2>
+<ol>
+<li><strong>排他性</strong>：你要么有无数个读者（<code>&amp;T</code>），要么有一个作者（<code>&amp;mut T</code>），决不能同时存在。</li>
+<li><strong>有效性</strong>：引用必须总是指向有效的内存（引用不能活得比数据更久）。</li>
+<li><strong>显式性</strong>：所有的借用关系必须在编译期就能被推导出来（否则需要生命周期标注）。</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="第五章进阶与优化-advanced--optimization"><a class="header" href="#第五章进阶与优化-advanced--optimization">第五章：进阶与优化 (Advanced &amp; Optimization)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="零成本抽象-zero-cost-abstractions"><a class="header" href="#零成本抽象-zero-cost-abstractions">零成本抽象 (Zero-Cost Abstractions)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="并发编程-concurrency"><a class="header" href="#并发编程-concurrency">并发编程 (Concurrency)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="第六章部署与发布-deployment"><a class="header" href="#第六章部署与发布-deployment">第六章：部署与发布 (Deployment)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="构建优化-build-optimization"><a class="header" href="#构建优化-build-optimization">构建优化 (Build Optimization)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cicd-自动化部署集成"><a class="header" href="#cicd-自动化部署集成">CI/CD 自动化部署集成</a></h1>
+<p>本教程不仅教你写 Rust，还教你如何像专业团队一样交付文档。我们将使用 <strong>GitHub Actions</strong> 自动将这份 <code>mdBook</code> 编译成 HTML 网站，并发布到 <strong>GitHub Pages</strong>。</p>
+<h2 id="1-工作流配置深度解析"><a class="header" href="#1-工作流配置深度解析">1. 工作流配置深度解析</a></h2>
+<p>文件位置：<code>.github/workflows/deploy.yml</code></p>
+<h3 id="核心配置解读"><a class="header" href="#核心配置解读">核心配置解读</a></h3>
+<pre><code class="language-yaml">permissions:
+  contents: write
+</code></pre>
+<ul>
+<li><strong>Why?</strong> 默认情况下，GitHub Actions 的令牌（GITHUB_TOKEN）只有读取权限。</li>
+<li><strong>What?</strong> 我们需要将编译好的 HTML 文件 <strong>git push</strong> 到 <code>gh-pages</code> 分支。这本质上是一次“写入”操作。</li>
+<li><strong>Error Prediction</strong>: 如果不加这一行，你会收到 <code>403 Forbidden</code> 错误，提示 Action 无法推送到远程分支。</li>
+</ul>
+<h3 id="部署步骤拆解"><a class="header" href="#部署步骤拆解">部署步骤拆解</a></h3>
+<ol>
+<li><strong>Checkout</strong>: 拉取源码。</li>
+<li><strong>Install mdBook</strong>: 使用 <code>peaceiris/actions-mdbook</code> 动作。它会自动下载最新版的 <code>mdbook</code> 二进制文件并添加到 PATH。</li>
+<li><strong>Build</strong>: 运行 <code>mdbook build</code>。
+<ul>
+<li>输入：<code>src/</code> 目录下的 Markdown。</li>
+<li>输出：<code>book/</code> 目录下的 HTML/CSS/JS。</li>
+</ul>
+</li>
+<li><strong>Deploy</strong>: 使用 <code>peaceiris/actions-gh-pages</code> 动作。
+<ul>
+<li><strong>Magic</strong>: 它会把 <code>book/</code> 目录的内容打包，强制推送（Force Push）到一个名为 <code>gh-pages</code> 的孤儿分支（Orphan Branch）。</li>
+<li><strong>Result</strong>: GitHub Pages 服务检测到 <code>gh-pages</code> 分支的更新，自动刷新网站。</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-启用-github-pages"><a class="header" href="#2-启用-github-pages">2. 启用 GitHub Pages</a></h2>
+<p>即使配置了 Action，你还需要在仓库设置中打开 Pages 功能：</p>
+<ol>
+<li>进入 GitHub 仓库页面 -&gt; <strong>Settings</strong>。</li>
+<li>点击左侧栏的 <strong>Pages</strong>。</li>
+<li>在 <strong>Build and deployment</strong> 下：
+<ul>
+<li>Source: 选择 <strong>Deploy from a branch</strong>。</li>
+<li>Branch: 选择 <strong>gh-pages</strong> (注意：这个分支只有在第一次 Action 运行成功后才会出现)。</li>
+<li>Folder: <strong>/(root)</strong>。</li>
+</ul>
+</li>
+</ol>
+<h2 id="3-验证部署"><a class="header" href="#3-验证部署">3. 验证部署</a></h2>
+<p>当你把代码推送到 <code>main</code> 或 <code>master</code> 分支后：</p>
+<ol>
+<li>点击仓库上方的 <strong>Actions</strong> 标签页。</li>
+<li>你应该能看到一个名为 “Deploy to GitHub Pages” 的工作流正在运行。</li>
+<li>等待变成绿色对号（✅）。</li>
+<li>访问 <code>https://&lt;your-username&gt;.github.io/rust-guide/</code>。</li>
+</ol>
+<blockquote>
+<p><strong>故障排查</strong>:
+如果样式丢失（CSS 404），请检查 <code>book.toml</code> 中的 <code>site-url</code> 配置是否正确。它应该是 <code>/rust-guide/</code>（注意前后的斜杠）。</p>
+</blockquote>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
