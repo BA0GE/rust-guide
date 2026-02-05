@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fe3e61ed.js";
+            window.path_to_searchindex_js = "../searchindex-54f2ac4c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-81329d67.js"></script>
@@ -181,6 +181,46 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="并发编程-concurrency"><a class="header" href="#并发编程-concurrency">并发编程 (Concurrency)</a></h1>
+<p>Rust 的并发口号是：<strong>Fearless Concurrency (无畏并发)</strong>。</p>
+<h2 id="1-为什么并发很难"><a class="header" href="#1-为什么并发很难">1. 为什么并发很难？</a></h2>
+<p>在 C++/Java 中，并发最大的痛点是 <strong>数据竞争 (Data Race)</strong>。
+当两个线程同时访问同一块内存，且至少有一个在写入时，就会发生未定义行为。调试这种 Bug 是地狱级的，因为它们通常只在极低概率下复现。</p>
+<h2 id="2-send-和-sync-trait"><a class="header" href="#2-send-和-sync-trait">2. Send 和 Sync Trait</a></h2>
+<p>Rust 将并发安全性集成到了类型系统中。这是通过两个特殊的标记 Trait 实现的：</p>
+<ul>
+<li>
+<p><strong><code>Send</code></strong>: 允许所有权在线程间转移。</p>
+<ul>
+<li>绝大多数类型都是 Send 的。</li>
+<li>例外：<code>Rc&lt;T&gt;</code> (引用计数指针) 不是 Send，因为它的计数器更新不是原子的。如果你试图把 <code>Rc</code> 传给另一个线程，编译器会报错。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>Sync</code></strong>: 允许被多个线程同时访问（即 <code>&amp;T</code> 是 Send 的）。</p>
+<ul>
+<li><code>Mutex&lt;T&gt;</code> 是 Sync 的。</li>
+<li><code>RefCell&lt;T&gt;</code> 不是 Sync 的，因为它没有实现线程安全的借用检查。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-互斥锁-mutex-的所有权哲学"><a class="header" href="#3-互斥锁-mutex-的所有权哲学">3. 互斥锁 (Mutex) 的所有权哲学</a></h2>
+<p>在其他语言中，Mutex 只是一个锁，它保护什么数据完全靠程序员自觉。
+但在 Rust 中，<code>Mutex&lt;T&gt;</code> 是一个<strong>容器</strong>，它<strong>拥有</strong>数据 <code>T</code>。</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::sync::Mutex;
+
+let m = Mutex::new(5); // 锁里包着数据
+
+{
+    let mut num = m.lock().unwrap(); // 获取锁，才能拿到数据的引用
+    *num = 6;
+} // 离开作用域，锁自动释放！
+<span class="boring">}</span></code></pre>
+<ul>
+<li><strong>强制加锁</strong>：你要访问数据，必须先调用 <code>lock()</code>。如果不加锁，你连数据的皮都摸不到（类型系统限制）。</li>
+<li><strong>自动解锁</strong>：利用 RAII，当 <code>num</code> (MutexGuard) 离开作用域时，锁自动释放。你永远不会忘记解锁。</li>
+</ul>
 
                     </main>
 

@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fe3e61ed.js";
+            window.path_to_searchindex_js = "../searchindex-54f2ac4c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-81329d67.js"></script>
@@ -181,6 +181,50 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="编译器报错哲学-compiler-errors-philosophy"><a class="header" href="#编译器报错哲学-compiler-errors-philosophy">编译器报错哲学 (Compiler Errors Philosophy)</a></h1>
+<p>新手往往会被 Rust 冗长的报错信息吓退。但请记住：<strong>Rust 编译器是你最好的结对编程伙伴，而不是你的敌人。</strong></p>
+<h2 id="1-报错信息的结构"><a class="header" href="#1-报错信息的结构">1. 报错信息的结构</a></h2>
+<p>Rust 的报错信息经过精心设计，通常包含三个部分：</p>
+<ol>
+<li><strong>Error Code (错误码)</strong>: 如 <code>E0382</code>。这是错误的唯一索引。你可以用 <code>rustc --explain E0382</code> 查看详细解释。</li>
+<li><strong>Code Snippet (代码片段)</strong>: 带有颜色高亮和 ASCII 艺术箭头的代码引用，精确指出错误发生的位置。</li>
+<li><strong>Help/Suggestion (帮助建议)</strong>: 编译器猜测你想要做什么，并给出修改建议。</li>
+</ol>
+<h2 id="2-案例分析"><a class="header" href="#2-案例分析">2. 案例分析</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 5;
+x = 6;
+<span class="boring">}</span></code></pre>
+<p><strong>报错</strong>:</p>
+<pre><code class="language-text">error[E0384]: cannot assign twice to immutable variable `x`
+ --&gt; src/main.rs:3:5
+  |
+2 |     let x = 5;
+  |         - first assignment to `x`
+3 |     x = 6;
+  |     ^^^^^ cannot assign twice to immutable variable
+  |
+help: consider making this binding mutable
+  |
+2 |     let mut x = 5;
+  |         +++
+</code></pre>
+<p><strong>解读</strong>:</p>
+<ul>
+<li>它不仅告诉你“不能赋值两次”。</li>
+<li>它还指出了第一次赋值在哪。</li>
+<li>最重要的是，它给出了 <code>help</code>，直接告诉你加个 <code>mut</code> 就能解决。</li>
+</ul>
+<h2 id="3-驱动式开发-compiler-driven-development"><a class="header" href="#3-驱动式开发-compiler-driven-development">3. 驱动式开发 (Compiler-Driven Development)</a></h2>
+<p>在 Rust 中，一种高效的开发模式是：</p>
+<ol>
+<li>写出你认为逻辑正确的代码（哪怕类型还没对齐）。</li>
+<li>运行 <code>cargo check</code>。</li>
+<li><strong>只看第一个报错</strong>。</li>
+<li>修复它。</li>
+<li>重复。</li>
+</ol>
+<p>不要试图一次性修复所有报错，因为一个类型错误可能会引发后续一连串的连锁反应报错。修复了源头，后面的往往就自动消失了。</p>
 
                     </main>
 

@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fe3e61ed.js";
+            window.path_to_searchindex_js = "../searchindex-54f2ac4c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-81329d67.js"></script>
@@ -181,6 +181,90 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="猜数字游戏-guessing-game"><a class="header" href="#猜数字游戏-guessing-game">猜数字游戏 (Guessing Game)</a></h1>
+<p>这是 Rust 官方教程中的经典案例。我们将用“全能系统化”的视角重新审视它，挖掘其中隐藏的工程细节。</p>
+<h2 id="1-需求分析"><a class="header" href="#1-需求分析">1. 需求分析</a></h2>
+<ul>
+<li>生成一个 1-100 的随机数。</li>
+<li>读取用户输入。</li>
+<li>比较大小并给出提示（大了/小了/猜对了）。</li>
+<li>循环直到猜对。</li>
+</ul>
+<h2 id="2-引入依赖-crates"><a class="header" href="#2-引入依赖-crates">2. 引入依赖 (Crates)</a></h2>
+<p>我们需要随机数生成器。Rust 标准库（std）为了保持精简，没有内置随机数功能。我们需要引入 <code>rand</code> crate。</p>
+<p>修改 <code>Cargo.toml</code>:</p>
+<pre><code class="language-toml">[dependencies]
+rand = "0.8.5"
+</code></pre>
+<blockquote>
+<p><strong>SemVer 哲学</strong>: <code>0.8.5</code> 实际上意味着 <code>^0.8.5</code>，即允许更新到 <code>0.8.z</code> 的任何版本，但不能升级到 <code>0.9.0</code>。这是 Rust 社区对语义化版本 (Semantic Versioning) 的严格遵守。</p>
+</blockquote>
+<h2 id="3-完整代码解构"><a class="header" href="#3-完整代码解构">3. 完整代码解构</a></h2>
+<pre class="playground"><code class="language-rust">use std::io; // 引入标准库的 IO 模块
+use std::cmp::Ordering; // 引入比较枚举
+use rand::Rng; // 引入 Rng trait (只有引入了 trait，才能调用其方法)
+
+fn main() {
+    println!("猜数字游戏！");
+
+    // thread_rng 是线程本地的随机数生成器
+    // gen_range 是 Rng trait 定义的方法
+    let secret_number = rand::thread_rng().gen_range(1..=100);
+
+    loop {
+        println!("请输入你的猜测：");
+
+        // 创建一个可变的空字符串
+        // String::new() 调用的是关联函数 (Associated Function)
+        let mut guess = String::new();
+
+        // 1. read_line(&amp;mut guess): 传入可变引用，让函数修改它
+        // 2. expect(...): 处理 Result 枚举。如果是 Err，就崩溃并打印消息
+        io::stdin()
+            .read_line(&amp;mut guess)
+            .expect("读取行失败");
+
+        // Shadowing (遮蔽): 我们定义了一个新的 guess 变量，覆盖了上面的字符串 guess
+        // parse(): 将字符串解析为数字。它是泛型的，需要类型标注 (u32) 来推断
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) =&gt; num,
+            Err(_) =&gt; continue, // 如果输入的不是数字，跳过本次循环
+        };
+
+        // match 表达式：Rust 控制流的核心
+        match guess.cmp(&amp;secret_number) {
+            Ordering::Less =&gt; println!("太小了！"),
+            Ordering::Greater =&gt; println!("太大了！"),
+            Ordering::Equal =&gt; {
+                println!("猜对了！");
+                break; // 退出循环
+            }
+        }
+    }
+}</code></pre>
+<h2 id="4-关键知识点深挖"><a class="header" href="#4-关键知识点深挖">4. 关键知识点深挖</a></h2>
+<h3 id="shadowing-变量遮蔽"><a class="header" href="#shadowing-变量遮蔽">Shadowing (变量遮蔽)</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut guess = String::new();
+let guess: u32 = ...;
+<span class="boring">}</span></code></pre>
+<p>在其他语言中，这会报错（变量重名）。但在 Rust 中，这是合法的，并且被鼓励。</p>
+<ul>
+<li><strong>Why?</strong> 它允许我们复用变量名，而不需要想出 <code>guess_str</code>, <code>guess_int</code> 这种笨拙的名字。它通常用于类型转换场景。</li>
+</ul>
+<h3 id="result-枚举与错误处理"><a class="header" href="#result-枚举与错误处理">Result 枚举与错误处理</a></h3>
+<p><code>read_line</code> 返回 <code>io::Result</code>，这是一个枚举：</p>
+<ul>
+<li><code>Ok(T)</code>: 成功，包含返回值。</li>
+<li><code>Err(E)</code>: 失败，包含错误信息。</li>
+</ul>
+<p>如果你不处理这个 Result（比如不调用 <code>expect</code> 或 <code>match</code>），编译器会发出警告。这是 Rust 强迫你面对可能发生的错误的体现。</p>
+<h3 id="trait-作用域"><a class="header" href="#trait-作用域">Trait 作用域</a></h3>
+<p>注意 <code>use rand::Rng;</code> 这一行。
+如果我们删掉它，<code>gen_range</code> 方法就会报错找不到。</p>
+<blockquote>
+<p><strong>RULE</strong>: 要调用一个 Trait 的方法，必须先将该 Trait 引入当前作用域。</p>
+</blockquote>
 
                     </main>
 

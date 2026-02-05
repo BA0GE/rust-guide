@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fe3e61ed.js";
+            window.path_to_searchindex_js = "../searchindex-54f2ac4c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-81329d67.js"></script>
@@ -181,6 +181,56 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="环境准备-prerequisites"><a class="header" href="#环境准备-prerequisites">环境准备 (Prerequisites)</a></h1>
+<p>在开始 Rust 之旅前，我们需要配置一个专业的开发环境。</p>
+<h2 id="1-安装-rust-工具链"><a class="header" href="#1-安装-rust-工具链">1. 安装 Rust 工具链</a></h2>
+<h3 id="unix-like-macos--linux"><a class="header" href="#unix-like-macos--linux">Unix-like (macOS / Linux)</a></h3>
+<p>这是官方推荐的方式，使用 <code>rustup</code> 安装脚本：</p>
+<pre><code class="language-bash">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre>
+<h3 id="windows"><a class="header" href="#windows">Windows</a></h3>
+<p>下载并运行 <code>rustup-init.exe</code>。</p>
+<h3 id="验证安装"><a class="header" href="#验证安装">验证安装</a></h3>
+<p>打开新终端，输入：</p>
+<pre><code class="language-bash">rustc --version
+cargo --version
+</code></pre>
+<h2 id="2-什么是-rustup"><a class="header" href="#2-什么是-rustup">2. 什么是 Rustup？</a></h2>
+<p>不要混淆 <code>rustc</code> 和 <code>rustup</code>。</p>
+<ul>
+<li><strong>rustc</strong>: 编译器。</li>
+<li><strong>cargo</strong>: 包管理器。</li>
+<li><strong>rustup</strong>: <strong>工具链管理器 (Toolchain Multiplexer)</strong>。
+<ul>
+<li>它可以帮你安装不同版本的 rustc (stable, beta, nightly)。</li>
+<li>它可以帮你安装交叉编译的目标 (Targets)，比如 <code>wasm32-unknown-unknown</code>。</li>
+<li>它可以帮你管理辅助组件，如 <code>rust-analyzer</code>, <code>clippy</code>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-ide-选择"><a class="header" href="#3-ide-选择">3. IDE 选择</a></h2>
+<h3 id="vs-code-推荐"><a class="header" href="#vs-code-推荐">VS Code (推荐)</a></h3>
+<p>目前体验最好的轻量级方案。</p>
+<ul>
+<li><strong>插件</strong>: 必须安装 <strong>rust-analyzer</strong>。</li>
+<li><strong>注意</strong>: 不要安装官方旧版的 “Rust” 插件，它已经停止维护。请认准 “rust-analyzer”。</li>
+</ul>
+<h3 id="jetbrains-rustrover--intellij-idea"><a class="header" href="#jetbrains-rustrover--intellij-idea">JetBrains RustRover / IntelliJ IDEA</a></h3>
+<p>如果你习惯 JetBrains 全家桶，这是一个强大的选择。它有独立的语言分析引擎，不依赖 rust-analyzer。</p>
+<h2 id="4-配置国内源-optional"><a class="header" href="#4-配置国内源-optional">4. 配置国内源 (Optional)</a></h2>
+<p>如果你在中国大陆，连接 crates.io 可能会很慢。可以配置字节跳动或清华大学的镜像源。</p>
+<p>创建 <code>~/.cargo/config.toml</code>:</p>
+<pre><code class="language-toml">[source.crates-io]
+replace-with = 'rsproxy'
+
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
+
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+
+[net]
+git-fetch-with-cli = true
+</code></pre>
 
                     </main>
 

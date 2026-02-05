@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fe3e61ed.js";
+            window.path_to_searchindex_js = "../searchindex-54f2ac4c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-81329d67.js"></script>
@@ -181,6 +181,61 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="内存管理的演变-evolution-of-memory-management"><a class="header" href="#内存管理的演变-evolution-of-memory-management">内存管理的演变 (Evolution of Memory Management)</a></h1>
+<p>要理解 Rust 为什么这样设计，我们必须回顾计算机科学史上关于“内存管理”的战争。</p>
+<h2 id="1-史前时代手动管理-manual-management"><a class="header" href="#1-史前时代手动管理-manual-management">1. 史前时代：手动管理 (Manual Management)</a></h2>
+<p><strong>代表</strong>: C, C++</p>
+<ul>
+<li><strong>机制</strong>: 程序员是上帝。
+<ul>
+<li><code>malloc()</code>: 给我一块内存。</li>
+<li><code>free()</code>: 拿走这块内存。</li>
+</ul>
+</li>
+<li><strong>优点</strong>: 极致的性能，极小的运行时开销。</li>
+<li><strong>缺点</strong>: 人总是会犯错。
+<ul>
+<li>忘释放 -&gt; <strong>内存泄漏 (Memory Leak)</strong></li>
+<li>释放早了 -&gt; <strong>悬空指针 (Dangling Pointer)</strong></li>
+<li>释放两次 -&gt; <strong>双重释放 (Double Free)</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="2-工业革命垃圾回收-garbage-collection"><a class="header" href="#2-工业革命垃圾回收-garbage-collection">2. 工业革命：垃圾回收 (Garbage Collection)</a></h2>
+<p><strong>代表</strong>: Java, Python, Go, JavaScript</p>
+<ul>
+<li><strong>机制</strong>: 引入一个后台进程（GC）。
+<ul>
+<li>你只管申请，不用管释放。</li>
+<li>GC 会定期扫描内存，标记不再使用的对象，并清理它们。</li>
+</ul>
+</li>
+<li><strong>优点</strong>: 极大的开发效率，杜绝了绝大多数内存安全问题。</li>
+<li><strong>缺点</strong>: <strong>不可预测性</strong>。
+<ul>
+<li>Stop-The-World (STW): GC 工作时，你的程序必须暂停。这对实时系统（如高频交易、嵌入式控制）是致命的。</li>
+<li>内存膨胀：为了减少 GC 频率，通常需要申请比实际需求更多的内存。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-rust-的变革所有权系统-ownership"><a class="header" href="#3-rust-的变革所有权系统-ownership">3. Rust 的变革：所有权系统 (Ownership)</a></h2>
+<p>Rust 问了一个问题：<em>能不能既要 C 的性能，又要 Java 的安全，还不要 GC？</em></p>
+<p>答案是：<strong>将运行时的检查，提前到编译时。</strong></p>
+<h3 id="核心差异表"><a class="header" href="#核心差异表">核心差异表</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">特性</th><th style="text-align: left">C/C++</th><th style="text-align: left">Java/Go</th><th style="text-align: left">Rust</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><strong>内存释放时机</strong></td><td style="text-align: left">手动调用 <code>free</code> 时</td><td style="text-align: left">GC 运行时（不确定）</td><td style="text-align: left">变量离开作用域时（确定）</td></tr>
+<tr><td style="text-align: left"><strong>运行时开销</strong></td><td style="text-align: left">无</td><td style="text-align: left">重 (GC 扫描)</td><td style="text-align: left">无 (编译后就是机器码)</td></tr>
+<tr><td style="text-align: left"><strong>安全性</strong></td><td style="text-align: left">靠程序员细心</td><td style="text-align: left">靠虚拟机</td><td style="text-align: left">靠编译器检查</td></tr>
+<tr><td style="text-align: left"><strong>开发难度</strong></td><td style="text-align: left">高</td><td style="text-align: left">低</td><td style="text-align: left">高（学习曲线陡峭）</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="结语"><a class="header" href="#结语">结语</a></h3>
+<p>Rust 并不是发明了新的内存管理方式，而是严格执行了 <strong>RAII (Resource Acquisition Is Initialization)</strong> 范式。它强迫你在写代码时就想清楚每一块内存的生命周期，从而在编译出的机器码中，自动插入了最精确的 <code>free</code> 调用。</p>
 
                     </main>
 

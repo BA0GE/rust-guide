@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fe3e61ed.js";
+            window.path_to_searchindex_js = "../searchindex-54f2ac4c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-81329d67.js"></script>
@@ -181,6 +181,66 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="生命周期-lifetimes"><a class="header" href="#生命周期-lifetimes">生命周期 (Lifetimes)</a></h1>
+<p>生命周期是 Rust 中最令人望而生畏的概念，但它其实只是 <strong>作用域 (Scope)</strong> 的显式命名。</p>
+<h2 id="1-核心哲学悬空指针的终结者"><a class="header" href="#1-核心哲学悬空指针的终结者">1. 核心哲学：悬空指针的终结者</a></h2>
+<p>在 C/C++ 中，一个指针指向的内存被释放后，指针依然存在。这就是 <strong>悬空指针 (Dangling Pointer)</strong>。当你再次使用这个指针时，程序就会崩溃或出现安全漏洞。</p>
+<p>Rust 的解决方案是：<strong>引用的寿命不能长于它指向的数据的寿命。</strong></p>
+<blockquote>
+<p><strong>RULE</strong>: 被借用者 (Referencee) 必须活得比借用者 (Reference) 更久。</p>
+</blockquote>
+<h2 id="2-为什么需要标注-the-why"><a class="header" href="#2-为什么需要标注-the-why">2. 为什么需要标注？ (The Why)</a></h2>
+<p>大多数时候，Rust 编译器能自动推导生命周期（通过生命周期省略规则）。但在某些复杂场景下，编译器无法确定谁活得更久，这时候它就会“装傻”，要求你显式告诉它。</p>
+<h3 id="经典场景二选一返回"><a class="header" href="#经典场景二选一返回">经典场景：二选一返回</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+    if x.len() &gt; y.len() { x } else { y }
+}
+<span class="boring">}</span></code></pre>
+<p><strong>编译器报错</strong>：<code>missing lifetime specifier</code></p>
+<p><strong>编译器的困惑</strong>：</p>
+<ul>
+<li>函数返回一个引用。</li>
+<li>这个引用可能指向 <code>x</code>，也可能指向 <code>y</code>。</li>
+<li><code>x</code> 和 <code>y</code> 的寿命可能不一样。</li>
+<li>于是编译器问：<em>“我怎么知道返回值的寿命是跟 <code>x</code> 走，还是跟 <code>y</code> 走？”</em></li>
+</ul>
+<h2 id="3-语法解构-a"><a class="header" href="#3-语法解构-a">3. 语法解构 <code>'a</code></a></h2>
+<p>生命周期标注语法 <code>'a</code> 看起来很奇怪。</p>
+<ul>
+<li><strong>词源</strong>: 这里的 <code>'</code> (tick) 来源于 OCaml 等函数式语言的类型变量表示法。</li>
+<li><strong>含义</strong>: 它是一个<strong>泛型参数</strong>。它不改变代码的行为，只帮助编译器进行静态检查。</li>
+</ul>
+<h3 id="修复代码"><a class="header" href="#修复代码">修复代码</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+    if x.len() &gt; y.len() { x } else { y }
+}
+<span class="boring">}</span></code></pre>
+<p><strong>解读</strong>：</p>
+<ul>
+<li>我们定义了一个生命周期 <code>'a</code>。</li>
+<li>参数 <code>x</code> 至少活得跟 <code>'a</code> 一样长。</li>
+<li>参数 <code>y</code> 至少活得跟 <code>'a</code> 一样长。</li>
+<li>返回值也至少活得跟 <code>'a</code> 一样长。</li>
+<li><strong>结论</strong>：返回值的生命周期，等于 <code>x</code> 和 <code>y</code> 中<strong>较短</strong>的那一个。</li>
+</ul>
+<h2 id="4-静态生命周期-static"><a class="header" href="#4-静态生命周期-static">4. 静态生命周期 <code>'static</code></a></h2>
+<p>这是唯一的特例。</p>
+<ul>
+<li><strong>含义</strong>: 这个引用可以活得跟整个程序一样长。</li>
+<li><strong>场景</strong>: 所有的字符串字面量（String Literals）都是 <code>'static</code> 的。
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let s: &amp;'static str = "I have a static lifetime.";
+<span class="boring">}</span></code></pre>
+因为这些字符串直接硬编码在二进制文件的数据段 (Data Segment) 中，程序不死，它们不灭。</li>
+</ul>
+<h2 id="5-心理模型"><a class="header" href="#5-心理模型">5. 心理模型</a></h2>
+<p>不要把生命周期看作是“改变”变量存活时间的东西。
+把它看作是 <strong>契约 (Contract)</strong>。</p>
+<p>当你写 <code>&lt;'a&gt;</code> 时，你是在跟编译器签合同：“我保证输入和输出之间的存活关系满足这个条件，如果不满足，请在编译时拒绝我，别让我运行时崩溃。”</p>
 
                     </main>
 

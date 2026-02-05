@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fe3e61ed.js";
+            window.path_to_searchindex_js = "../searchindex-54f2ac4c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-81329d67.js"></script>
@@ -181,6 +181,48 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="零成本抽象-zero-cost-abstractions"><a class="header" href="#零成本抽象-zero-cost-abstractions">零成本抽象 (Zero-Cost Abstractions)</a></h1>
+<p>这是 Rust 性能媲美 C++ 的基石。</p>
+<h2 id="1-定义"><a class="header" href="#1-定义">1. 定义</a></h2>
+<p>Bjarne Stroustrup (C++ 之父) 定义的“零成本抽象”包含两层含义：</p>
+<ol>
+<li><strong>不用的东西，不需要为之付出代价</strong> (What you don’t use, you don’t pay for)。</li>
+<li><strong>用的东西，你手写也不可能做得更好</strong> (What you use, you couldn’t hand code any better)。</li>
+</ol>
+<h2 id="2-迭代器-iterators-vs-循环-loops"><a class="header" href="#2-迭代器-iterators-vs-循环-loops">2. 迭代器 (Iterators) vs 循环 (Loops)</a></h2>
+<h3 id="高级抽象迭代器"><a class="header" href="#高级抽象迭代器">高级抽象：迭代器</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let sum: i32 = vec.iter().map(|x| x * 2).sum();
+<span class="boring">}</span></code></pre>
+<p>这段代码读起来像英语，充满了函数式编程的味道。它会不会比手动 <code>for</code> 循环慢？</p>
+<h3 id="底层实现循环"><a class="header" href="#底层实现循环">底层实现：循环</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut sum = 0;
+for x in &amp;vec {
+    sum += x * 2;
+}
+<span class="boring">}</span></code></pre>
+<h3 id="结论"><a class="header" href="#结论">结论</a></h3>
+<p><strong>它们生成的汇编代码几乎完全一样！</strong>
+甚至，在某些情况下，迭代器版本会更快。因为迭代器对其边界有更精确的掌握，编译器可以消除一些不必要的 <strong>边界检查 (Bounds Check)</strong>，并进行更好的 <strong>循环展开 (Loop Unrolling)</strong> 和 <strong>向量化 (SIMD)</strong> 优化。</p>
+<h2 id="3-泛型单态化-monomorphization"><a class="header" href="#3-泛型单态化-monomorphization">3. 泛型单态化 (Monomorphization)</a></h2>
+<p>当你使用泛型函数 <code>fn print&lt;T&gt;(x: T)</code> 时，你并没有付出运行时的动态分发开销（像 Java 的 Erasure 或 Python 的 Dynamic Typing）。</p>
+<p>Rust 在编译时，会扫描所有调用 <code>print</code> 的地方。</p>
+<ul>
+<li>如果你调用了 <code>print(1)</code> (i32)</li>
+<li>又调用了 <code>print("hello")</code> (&amp;str)</li>
+</ul>
+<p>编译器会生成两个函数：</p>
+<ul>
+<li><code>print_i32(x: i32)</code></li>
+<li><code>print_str(x: &amp;str)</code></li>
+</ul>
+<p>这就叫 <strong>单态化</strong>。</p>
+<ul>
+<li><strong>Cost</strong>: 编译时间增加，二进制体积增加。</li>
+<li><strong>Benefit</strong>: 运行时性能达到极致（静态函数调用，内联优化）。</li>
+</ul>
 
                     </main>
 
