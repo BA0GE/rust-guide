@@ -1,7 +1,6 @@
 [book]
 authors = ["Universal Tutorial Architect"]
 language = "zh-CN"
-multilingual = false
 src = "src"
 title = "Rust 语言系统化教程"
 
